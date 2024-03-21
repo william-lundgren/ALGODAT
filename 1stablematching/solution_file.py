@@ -7,6 +7,7 @@ def remove_student_pairing(company_students, company_nr, new_student, students):
 
 
 def main():
+
     input_lines = []
     for line in sys.stdin:
         if '' == line.rstrip():
@@ -49,6 +50,7 @@ def main():
         else:
             students_preference[unit_i] = line
 
+
     while len(students_preference) > 0:
         # Remove student from list and try to apply
         student = students_preference.pop(0)
@@ -74,7 +76,6 @@ def main():
 
     for i in company_students:
         print(i[0])
-
 
 if __name__ == "__main__":
     main()
