@@ -23,12 +23,12 @@ def BFS(start, end, edges):
     q = [start]
     finished = False
 
-    start = time.time()
     while len(q) > 0 and not finished:
-        v = q.pop()
+        v = q.pop(0)
 
         # Neighbors
         for w in edges[v]:
+            
             if not visited[w]:
                 visited[w] = True
                 q.append(w)
@@ -36,7 +36,6 @@ def BFS(start, end, edges):
                 if w == end:
                     finished = True
                     break
-    time.time()
     if finished:
         count = 0
         node = end
@@ -61,6 +60,8 @@ def main():
     words = input_lines[1: N + 1]
     queries = [s.split() for s in input_lines[N + 1:]]
 
+    # t_start = time.time()
+
     # CREATE TREE TIME
     edges = {
     }
@@ -79,10 +80,14 @@ def main():
             if has_edge(value_word, key_word):
                 edges[value_word].append(key_word)
 
+    # print(time.time()-t_start)
+
     # BFS TIME
     for query in queries:
         start, end = query[0], query[1]
         print(BFS(start, end, edges))
+
+    # print(time.time()-t_start)
 
 
 if __name__ == "__main__":
