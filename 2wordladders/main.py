@@ -1,5 +1,5 @@
 import sys
-
+import time
 
 def has_edge(u, v):
     v = list(v)
@@ -23,6 +23,7 @@ def BFS(start, end, edges):
     q = [start]
     finished = False
 
+    start = time.time()
     while len(q) > 0 and not finished:
         v = q.pop()
 
@@ -35,10 +36,10 @@ def BFS(start, end, edges):
                 if w == end:
                     finished = True
                     break
-
+    time.time()
     if finished:
         count = 0
-        node = w
+        node = end
         while node != start:
             node = pred[node]
             count += 1

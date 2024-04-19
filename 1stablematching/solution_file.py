@@ -1,6 +1,7 @@
 import sys
 import time
 
+
 def remove_student_pairing(company_students, company_nr, new_student, students):
     students.append(company_students[company_nr - 1])
     company_students[company_nr - 1] = new_student
@@ -45,7 +46,7 @@ def main():
             # change the list to mean index is student_i and value of index i is how much the company wants student_i
             companies_preference[unit_i] = [0 for _ in range(N)]
             for n in range(N):
-                companies_preference[unit_i][ int( line[n+1] ) - 1 ] = n+1 #index magic
+                companies_preference[unit_i][int(line[n+1]) - 1] = n+1  # index magic
             company_parsed[unit_i] = True
         else:
             students_preference[unit_i] = line
@@ -76,6 +77,7 @@ def main():
 
     for i in company_students:
         print(i[0])
+
 
 if __name__ == "__main__":
     main()
