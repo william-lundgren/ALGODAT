@@ -7,19 +7,27 @@ class Timer:
 
 
 def has_edge(u, v):
-    v = list(v)
-
     startt = time.time()
-    for letter in u[1:]:
-        try:
-            v.remove(letter)
-        except ValueError:
-            continue
+    v = list(v)
+    u = list(u[1:])
+    strike = False
 
+    for i, vlet in enumerate(v):
+        for j, ulet in enumerate(u):
+            if vlet != ulet:
+                if strike:
+                    timer = time.time() - startt
+                    Timer.timed += timer
+                    return False
+                else:
+                    strike = True
+            else:
+                u.pop(j)
+                break
+    
     timer = time.time() - startt
-
     Timer.timed += timer
-    return len(v) == 1
+    return True
 
 
 def BFS(start, end, edges):
@@ -89,7 +97,9 @@ def main():
 
             if has_edge(value_word, key_word):
                 edges[value_word].append(key_word)
+
     print("Time for create tree:", time.time() - startt)
+
     # BFS TIME
     startt = time.time()
     for query in queries:
