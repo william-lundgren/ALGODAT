@@ -3,14 +3,21 @@ import time
 
 def has_edge(u, v):
     v = list(v)
+    u = list(u[1:])
+    strike = False
 
-    for letter in u[1:]:
-        try:
-            v.remove(letter)
-        except ValueError:
-            continue
+    for i, vlet in enumerate(v):
+        for j, ulet in enumerate(u):
+            if vlet != ulet:
+                if strike:
+                    return False
+                else:
+                    strike = True
+            else:
+                u.pop(j)
+                break
 
-    return len(v) == 1
+    return True
 
 
 def BFS(start, end, edges):
@@ -60,7 +67,7 @@ def main():
     words = input_lines[1: N + 1]
     queries = [s.split() for s in input_lines[N + 1:]]
 
-    # t_start = time.time()
+    t_start = time.time()
 
     # CREATE TREE TIME
     edges = {
@@ -80,14 +87,14 @@ def main():
             if has_edge(value_word, key_word):
                 edges[value_word].append(key_word)
 
-    # print(time.time()-t_start)
+    print(time.time()-t_start)
 
     # BFS TIME
     for query in queries:
         start, end = query[0], query[1]
-        print(BFS(start, end, edges))
+        (BFS(start, end, edges))
 
-    # print(time.time()-t_start)
+    print(time.time()-t_start)
 
 
 if __name__ == "__main__":
