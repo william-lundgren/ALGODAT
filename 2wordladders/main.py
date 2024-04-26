@@ -96,7 +96,8 @@ def main():
         start, end = query[0], query[1]
         #print(BFS(start, end, edges))
     print("Time for BFS", time.time() - startt)
-    print("Time put in edge:",Timer.timed)
+    print("Time put in edge:", Timer.timed)
+
 
 if __name__ == "__main__":
     main()
