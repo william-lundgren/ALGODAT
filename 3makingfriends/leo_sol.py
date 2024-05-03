@@ -20,7 +20,7 @@ class UnionFindElement:
             return self
         if self.root is None:
             self.root = self.parent.find()
-        return self.root
+        return self.root.find()
     
     def union(self, other):
         '''Join two sets together. Assuming they are disjoint.'''
@@ -42,7 +42,7 @@ def kruskal(edges, N):
         if v.find() !=u.find():
             u.union(v)
             mst.append(edge)
-        print(["parent: "+str(e.parent.index)+" root: "+str(e.root) for e in nodes])
+        # print(["parent: "+str(e.parent.index)+" root: "+str(e.root) for e in nodes])
     return mst
 
 

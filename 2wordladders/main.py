@@ -13,18 +13,16 @@ def has_edge(u, v):
     strike = False
 
     for i, vlet in enumerate(v):
+        match = False
         for j, ulet in enumerate(u):
-            if vlet != ulet:
-                if strike:
-                    timer = time.time() - startt
-                    Timer.timed += timer
-                    return False
-                else:
-                    strike = True
-            else:
+            if vlet == ulet:
+                match = True
                 u.pop(j)
                 break
-    
+        if not strike and not match:
+            strike = True
+        elif not match:
+            return False
     timer = time.time() - startt
     Timer.timed += timer
     return True
@@ -104,7 +102,7 @@ def main():
     startt = time.time()
     for query in queries:
         start, end = query[0], query[1]
-        #print(BFS(start, end, edges))
+        (BFS(start, end, edges))
     print("Time for BFS", time.time() - startt)
     print("Time put in edge:",Timer.timed)
 

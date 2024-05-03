@@ -59,7 +59,7 @@ def BFS(start, end, edges, words):
         return count
     else:
         return "Impossible"
-s
+
 
 def main():
     input_lines = []
