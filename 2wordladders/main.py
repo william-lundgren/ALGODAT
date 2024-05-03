@@ -89,14 +89,15 @@ def main():
 
             if has_edge(value_word, key_word):
                 edges[value_word].append(key_word)
-    print("Time for create tree:", time.time() - startt)
+    #print("Time for create tree:", time.time() - startt)
     # BFS TIME
     startt = time.time()
     for query in queries:
         start, end = query[0], query[1]
-        #print(BFS(start, end, edges))
-    print("Time for BFS", time.time() - startt)
-    print("Time put in edge:",Timer.timed)
+        print(BFS(start, end, edges))
+    #print("Time for BFS", time.time() - startt)
+    #print("Time put in edge:", Timer.timed)
+
 
 if __name__ == "__main__":
     main()
