@@ -1,11 +1,11 @@
 import sys
-
+import time
 
 class UnionFindElement:
     def __init__(self, index):
         self.index = index
         self.parent = self
-        self.root = None #"cache"
+        self.gateway = self
 
     def __eq__(self, other):
         if not isinstance(other, UnionFindElement):
@@ -19,39 +19,38 @@ class UnionFindElement:
     def find(self):
         if self.parent == self:
             return self
-        if self.root is None:
-            self.root = self.parent.find()
-        # is not the root anymore
-        if self.root.root is not None and self.root != self.root.root:
-            self.root = self.root.find()
-        return self.root
+        self.gateway = self.gateway.find()
+        return self.gateway
     
     def union(self, other):
         '''Join two sets together. Assuming they are disjoint.'''
         oldroot = self.find()
         newroot = other.find()
         oldroot.parent = newroot
-        oldroot.root = newroot
-        self.root = newroot
-
+        oldroot.gateway = newroot
+        self.gateway = newroot
 
 def kruskal(edges, N):
+    startt = time.time()
     remainingEdges = edges.copy()
     remainingEdges = sorted(remainingEdges, key=lambda x : x[2]) #Sort on weight
     nodes = [UnionFindElement(i+1) for i in range(N)]
     mst = []
+    print(time.time()-startt)
     while remainingEdges:
         edge = remainingEdges.pop(0)
         u = nodes[edge[0]-1]
         v = nodes[edge[1]-1]
-        if v.find() != u.find():
+        if v.find() !=u.find():
             u.union(v)
             mst.append(edge)
         # print(["parent: "+str(e.parent.index)+" root: "+str(e.root) for e in nodes])
+    print(time.time()-startt)
     return mst
 
 
 def main():
+
     input_lines = []
     for line in sys.stdin:
         if '' == line.rstrip():
@@ -64,7 +63,6 @@ def main():
     # print(mst)
     s = sum([edge[2] for edge in mst])
     print(s)
-
 
 if __name__ == "__main__":
     main()
