@@ -13,12 +13,12 @@ class Point:
 
 def closest_points(all_points):
     # list sorted by x values
-    p_x = all_points.sort(key=lambda p: p.x)
+    p_x = sorted(all_points, key=lambda p: p.x)
 
     # list sorted by y values
-    p_y = all_points.sort(key=lambda p: p.y)
+    p_y = sorted(all_points, key=lambda p: p.y)
 
-    closest(p_x, p_y, len(all_points))
+    return closest(p_x, p_y, len(all_points))
 
 
 def split_list(a_list):
@@ -34,9 +34,19 @@ def closest(p_x, p_y, n):
         d_1 = closest(r_x, r_y, n/2)
         d_2 = closest(l_x, l_y, n/2)
         delta = min(d_1, d_2)
+
+    # Fuck it we hardcoding
     else:
-
-
+        small_path = -1
+        for i in range(len(p_x)):
+            for j in range(i, len(p_x)):
+                dist = p_x[i].get_dist(p_x[j])
+                if small_path == -1:
+                    small_path = dist
+                else:
+                    if dist < small_path:
+                        small_path = dist
+        return small_path
 
 
 def main():
@@ -47,13 +57,13 @@ def main():
         input_lines.append(line.replace("\n", ""))
 
     N = input_lines.pop(0)
-    print(input_lines)
     points = []
     for line in input_lines:
         x, y = line.split()
         point = Point(x, y)
         points.append(point)
 
+    print(closest_points(points))
 
 
 if __name__ == "__main__":
