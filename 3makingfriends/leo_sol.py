@@ -1,5 +1,6 @@
 import sys
 
+
 class UnionFindElement:
     def __init__(self, index):
         self.index = index
@@ -20,7 +21,10 @@ class UnionFindElement:
             return self
         if self.root is None:
             self.root = self.parent.find()
-        return self.root.find()
+        # is not the root anymore
+        if self.root.root is not None and self.root != self.root.root:
+            self.root = self.root.find()
+        return self.root
     
     def union(self, other):
         '''Join two sets together. Assuming they are disjoint.'''
@@ -29,6 +33,7 @@ class UnionFindElement:
         oldroot.parent = newroot
         oldroot.root = newroot
         self.root = newroot
+
 
 def kruskal(edges, N):
     remainingEdges = edges.copy()
@@ -39,7 +44,7 @@ def kruskal(edges, N):
         edge = remainingEdges.pop(0)
         u = nodes[edge[0]-1]
         v = nodes[edge[1]-1]
-        if v.find() !=u.find():
+        if v.find() != u.find():
             u.union(v)
             mst.append(edge)
         # print(["parent: "+str(e.parent.index)+" root: "+str(e.root) for e in nodes])
@@ -47,7 +52,6 @@ def kruskal(edges, N):
 
 
 def main():
-
     input_lines = []
     for line in sys.stdin:
         if '' == line.rstrip():
@@ -60,6 +64,7 @@ def main():
     # print(mst)
     s = sum([edge[2] for edge in mst])
     print(s)
+
 
 if __name__ == "__main__":
     main()

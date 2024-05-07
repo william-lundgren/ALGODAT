@@ -10,11 +10,7 @@ class UnionFind:
         other.find().parent = self
 
     def find(self):
-        if self.parent == self:
-            return self
-        if self.root is None:
-            self.root = self.parent.find()
-        return self.root
+        pass  # lol
 
 
 def main():
