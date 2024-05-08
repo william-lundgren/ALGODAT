@@ -1,5 +1,6 @@
 import math
 import sys
+import time
 
 class Point:
     def __init__(self, x, y):
@@ -36,14 +37,126 @@ class PointCloud:
                 ir += 1
         return l_x,l_y,r_x,r_y
  
+    def closest_points(self):
+        return self.closest(self.p_x, self.p_y, self.N)
 
 
-p_x = [0,1,2,3,4,5,6]
-p_y = [2,5,1,3,6,4,0]
+    def closest(self, p_x, p_y, n):
+        l_x, l_y, r_x, r_y  = self.split_list(p_x, p_y)
 
-P = PointCloud([Point(p_x[i],p_y[i]) for i in range(len(p_x))])
+        if n >= 4:
+            d_1 = self.closest(r_x, r_y, (n+.5)//2)
+            d_2 = self.closest(l_x, l_y, (n)//2)
+            delta = min(d_1, d_2)
+            streck = self.points[r_x[0]].x
+            # sys.stderr.write(f"p_x: {p_x}, streck_id: {r_x[0]}, streck_x: {streck}, delta: {delta}, n: {n}, d_1: {d_1}, d_2: {d_2} \n")
 
-# p_yx = [7,2,0,3,5,1,4,6]
+            # One could create s_y by doing: s_y = [point for point in p_y if abs(point.x - streck) < delta]
+            # This probably calls abs(point.y - streck) < delta on way more pairs than neccesary
+            # Since p_x is sorted in x, we can look at the closest points and stop looking as soon as we are not close enough anymore. 
+            # Lets frist find edge elemets of s, s_xl and s_xr, by walking in x (in both L and R) from streck
+            s_xl = r_x[0]
+            s_xr = r_x[0] #start at streck
+            # looking_l, looking_r, i = True, True, 1
+            # while looking_l or looking_r: #O(n) but hopefully with small coeff
+            #     sys.stderr.write(f"i: {i}, s_xl: {s_xl}, s_xr: {s_xr} \n")
+            #     if looking_l:
+            #         point = self.points[l_x[-i]] #we start from the last (rightmost) element in l_x
+            #         if abs(point.x - streck) <= delta:
+            #             s_xl -= 1
+            #         else:
+            #             looking_l = False
+            #     if looking_r:
+            #             point = self.points[r_x[i]] #we start from the second (almost leftmost) element in r_x. Note that the first (leftmost) is already included.
+            #             if abs(point.x - streck) <= delta:
+            #                 s_xr += 1
+            #             else:
+            #                 looking_r = False
+            #     i += 1
+            #     if i > n//2:
+            #         looking_l = looking_r = False #we have reached the end of at least one of the arrays. "Unlikely" (with big n) but awlays possible.
 
-print(P.p_x, P.p_y)
-print(P.split_list(p_x,p_y))
+            looking = True
+            while looking:
+                # sys.stderr.write(f"s_xl: {s_xl}\n")
+                if s_xl <= p_x[0]: #stop if weve reached the edge
+                    break
+                point = self.points[p_x[s_xl-p_x[0]-1]] #look one step left
+                if abs(point.x - streck) <= delta:
+                    s_xl -= 1 #take one step left
+                else:
+                    looking = False
+            looking = True
+            while looking:
+                # sys.stderr.write(f"s_xr: {s_xr}\n")
+                if s_xr >= p_x[-1]: #stop if weve reached the edge
+                    break
+                point = self.points[p_x[s_xr-p_x[0]+1]] #look one step right
+                if abs(point.x - streck) <= delta:
+                    s_xr += 1 #take one step right
+                else:
+                    looking = False
+
+            # We now want to create and sort s_y based on y. This can be done in O(n) as we have a "constant lookup-time in s_x."
+            # We loop through p_y and simply check wheter or not p is within [s_xl, s_xr]
+            s_y = []
+            for p in p_y:
+                if p >= s_xl and p <= s_xr:
+                    s_y.append(p)
+
+
+            for i in range(len(s_y)): #O(n) but hopefully with small coeff
+                for j in range(i + 1, min(i+10, len(s_y))): #O(1)
+                    dist = self.points[s_y[i]].get_dist(self.points[s_y[j]])
+                    if dist < delta:
+                        delta = dist
+            return delta
+        
+        # Fuck it we hardcoding, i.e we have reached a base case and cannot recurse anymore
+        else:
+            small_path = -1
+            for i in range(len(p_x)):
+                for j in range(i + 1, len(p_x)):
+                    dist = self.points[p_x[i]].get_dist(self.points[p_x[j]])
+                    if small_path == -1:
+                        small_path = dist
+                    else:
+                        if dist < small_path:
+                            small_path = dist
+
+            return small_path
+
+
+def main():
+    tstart=time.time()
+    input_lines = []
+    for line in sys.stdin:
+        if '' == line.rstrip():
+            break
+        input_lines.append(line.replace("\n", ""))
+
+    N = input_lines.pop(0)
+    points = []
+    for line in input_lines:
+        x, y = line.split()
+        point = Point(x, y)
+        points.append(point)
+
+    P = PointCloud(points)
+    # TODO remember floating point stuff
+    print("{:.6f}".format(P.closest_points(), 6))
+    sys.stderr.write(f"Time: {time.time()-tstart}\n")
+
+
+if __name__ == "__main__":
+    main()
+
+# p_x = [0,1,2,3,4,5,6]
+# p_y = [2,5,1,3,6,4,0]
+
+# P = PointCloud([Point(p_x[i],p_y[i]) for i in range(len(p_x))])
+
+# # p_yx = [7,2,0,3,5,1,4,6]
+
+# print(P.p_x, P.p_y)
+# print(P.split_list(p_x,p_y))
