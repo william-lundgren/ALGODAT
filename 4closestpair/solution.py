@@ -28,7 +28,9 @@ def closest(p_x, p_y, n):
         d_2 = closest(l_x, l_y, n/2)
         delta = min(d_1, d_2)
 
-        s_y = [p for p in p_y if abs(p.x - split_x) < delta]
+        split_L = split_x - delta 
+        split_R = split_x + delta
+        s_y = [p for p in p_y if split_L < p.x < split_R]
         
         for i in range(len(s_y)): #O(n) but hopefully with small coeff
             for j in range(i + 1, min(i+6, len(s_y))): #O(1) but quite big coeff
@@ -55,11 +57,11 @@ def split_list(p_x, p_y):
     half = n//2
     l_x = p_x[:half]
     r_x = p_x[half:]
-    l_y = []
-    r_y = []
+    l_y = [] # Could be optimized since size is known already
+    r_y = [] # Same here
     split_x = r_x[0].x
     for p in p_y: #O(n)
-        if p.x<split_x:
+        if p.x < split_x:
             l_y.append(p)
         else:
             r_y.append(p)

@@ -82,7 +82,7 @@ class PointCloud:
             # We loop through p_y and simply check wheter or not p is within [s_xl, s_xr]
             s_y = []
             for p in p_y:
-                if p >= s_xl and p <= s_xr:
+                if s_xl <= p <= s_xr:
                     s_y.append(p)
             #We now have s_y
 
