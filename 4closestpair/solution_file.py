@@ -21,10 +21,7 @@ def closest_points(all_points):
     # list sorted by y values
     p_y = sorted(all_points, key=lambda p: p.y)
 
-    
-    # print(f"p_x: {p_x}")
-    # print(f"p_y: {p_y}")
-    return closest(p_x, p_y, p_y, len(all_points))
+    return closest(p_x, p_y, len(all_points))
 
 
 def split_list(a_list):
@@ -32,30 +29,18 @@ def split_list(a_list):
     return a_list[:half], a_list[half:]
 
 
-def closest(p_x, p_y, full_p_y, n):
-    
+def closest(p_x, p_y, n):
     l_x, r_x = split_list(p_x)
     l_y, r_y = split_list(p_y)
-    
+
     if n >= 4:
-        d_1 = closest(r_x, r_y, full_p_y, len(r_y))
-        d_2 = closest(l_x, l_y, full_p_y, len(l_y))
-
-        # print ("NEW ITER")
-        # print(f"l_x: {l_x}")
-        # print(f"r_x: {r_x}")
-        # print(f"l_y: {l_y}")
-        # print(f"r_y: {r_y}")
-        # print(f"n: {n}")
-
-
+        d_1 = closest(r_x, r_y, n/2)
+        d_2 = closest(l_x, l_y, n/2)
         delta = min(d_1, d_2)
-        streck = l_x[-1].x
-        # print(f"streck: {streck}")
-        s_y = [point for point in full_p_y if abs(point.x - streck) < delta] #O(n)
-        # print(f"midpoints s_y: {s_y}")
-        for i in range(len(s_y)): #O(n)
-            for j in range(i + 1, min(i+10,len(s_y))):
+        streck = r_y[0].y
+        s_y = [point for point in p_y if abs(point.y - streck) < delta]
+        for i in range(len(s_y)):
+            for j in range(i + 1, len(s_y)):
                 dist = s_y[i].get_dist(s_y[j])
                 if dist < delta:
                     delta = dist
