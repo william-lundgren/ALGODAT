@@ -1,6 +1,6 @@
 import math
 import sys
-
+import time
 
 class Point:
     def __init__(self, x, y):
@@ -61,6 +61,7 @@ def closest(p_x, p_y, n):
 
 
 def main():
+    tstart=time.time()
     input_lines = []
     for line in sys.stdin:
         if '' == line.rstrip():
@@ -76,6 +77,7 @@ def main():
 
     # TODO remember floating point stuff
     print("{:.6f}".format(closest_points(points), 6))
+    sys.stderr.write(f"Time: {time.time()-tstart}\n")
 
 
 if __name__ == "__main__":
