@@ -16,7 +16,7 @@ class Point:
 def closest_points(points):
     n = len(points)
     p_x = sorted(points, key=lambda p: p.x) #sorted on x, O(nlogn)
-    p_y = sorted(points, key=lambda p: p.y) #sorted on x, O(nlogn)
+    p_y = sorted(points, key=lambda p: p.y) #sorted on y, O(nlogn)
     return closest(p_x, p_y, n) 
 
 def closest(p_x, p_y, n):
@@ -24,14 +24,15 @@ def closest(p_x, p_y, n):
 
     #Divide and conquer
     if n >= 4:
-        d_1 = closest(r_x, r_y, n/2)
-        d_2 = closest(l_x, l_y, n/2)
+        d_1 = closest(r_x, r_y, n/2) #solve right problem
+        d_2 = closest(l_x, l_y, n/2) #solve left problem
         delta = min(d_1, d_2)
 
         split_L = split_x - delta 
         split_R = split_x + delta
-        s_y = [p for p in p_y if split_L < p.x < split_R]
+        s_y = [p for p in p_y if split_L < p.x < split_R] #create s_y. O(n). Sorted on y
         
+        #Check the strip s_y.
         for i in range(len(s_y)): #O(n) but hopefully with small coeff
             for j in range(i + 1, min(i+6, len(s_y))): #O(1) but quite big coeff
                 dist = s_y[i].get_dist(s_y[j])
@@ -39,7 +40,7 @@ def closest(p_x, p_y, n):
                     delta = dist
         return delta
     
-    # Brute force
+    # Brute force, base case
     else:
         smallest_distance = -1
         for i in range(len(p_x)):
@@ -82,7 +83,6 @@ def main():
         point = Point(x, y)
         points.append(point)
 
-    # TODO remember floating point stuff
     print("{:.6f}".format(closest_points(points), 6))
     sys.stderr.write(f"Time: {time.time()-tstart}\n")
 
