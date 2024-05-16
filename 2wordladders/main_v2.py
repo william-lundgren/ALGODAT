@@ -1,6 +1,7 @@
 import sys
 import time
 
+
 def has_edge(u, v):
     v = list(v)
 
@@ -11,6 +12,7 @@ def has_edge(u, v):
             continue
 
     return len(v) == 1
+
 
 def get_children(word, edges, words):
     #print(edges)
@@ -23,8 +25,6 @@ def get_children(word, edges, words):
             if has_edge(key_word, value_word):
                 edges[key_word].append(value_word)
         return edges[key_word]
-
-
 
 
 def BFS(start, end, edges, words):
@@ -74,7 +74,7 @@ def main():
     words = input_lines[1: N + 1]
     queries = [s.split() for s in input_lines[N + 1:]]
 
-    t_start = time.time()
+    #t_start = time.time()
 
     # CREATE TREE TIME
     edges = {
@@ -85,15 +85,15 @@ def main():
     #     edges[word] = []
         
 
-    print(time.time()-t_start)
+    #print(time.time()-t_start)
 
     # BFS TIME
     for query in queries:
         start, end = query[0], query[1]
-        (BFS(start, end, edges, words))
+        print(BFS(start, end, edges, words))
 
-    print(time.time()-t_start)
-    print(len(edges))
+    #print(time.time()-t_start)
+    #print(len(edges))
 
 
 if __name__ == "__main__":
