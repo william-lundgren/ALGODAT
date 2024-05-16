@@ -1,12 +1,6 @@
 import time
 import sys
-
-class Timer0:
-    timer = 0
-class TimerOpt:
-    timer = 0
-class TimerAlgo:
-    timer = 0
+from timing import *
 
 
 def parse_input():
