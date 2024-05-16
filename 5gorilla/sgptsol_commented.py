@@ -1,3 +1,6 @@
+import sys
+import time
+
 # Function to parse the input and create a cost matrix and a list of queries
 def parse_input():
     # Read the first line of input and split it into characters
@@ -74,6 +77,7 @@ def align_strings(s1, s2, cost_matrix):
 
 # Main function to run the alignment algorithm
 def main():
+    tstart = time.time()
     # Parse the input to get the cost matrix and queries
     cost_matrix, queries = parse_input()
     # Process each query
@@ -82,6 +86,7 @@ def main():
         aligned_s1, aligned_s2 = align_strings(s1, s2, cost_matrix)
         # Print the aligned strings
         print(aligned_s1, aligned_s2)
+    sys.stderr.write(f"Time: {time.time()-tstart}\n")
 
 # Standard Python boilerplate to run the main function
 if __name__ == "__main__":
