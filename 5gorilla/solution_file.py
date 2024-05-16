@@ -16,27 +16,27 @@ def align_strings(s1, s2, gain_map):
 
     # Initiate a zero-filled OPT-matrix (m-1)x(n-1)
     OPT = [[0] * (n + 1) for _ in range(m + 1)]
-    
+
     # Initiate a zero-filled pred matrix
     # 1 = we came from left
     # 2 = we came from bottom
     # 3 = we came from diagonal
-    pred = [[0] * (n+1) for _ in range(m+1)]
+    pred = [[0] * (n + 1) for _ in range(m + 1)]
 
     # Initiate first row and first column
-    for i in range(m+1):
+    for i in range(m + 1):
         pred[i][0] = 2
-        OPT[i][0] = delta*i
-    for i in range(n+1):
+        OPT[i][0] = delta * i
+    for i in range(n + 1):
         pred[0][i] = 1
-        OPT[0][i] = delta*i
-    
+        OPT[0][i] = delta * i
+
     # Fill OPT matrix
-    for i in range(1, m):
-        for j in range(1, n):
-            diag = OPT[i-1][j-1]+gain_map[s1[i]][s2[j]]
-            left = OPT[i][j-1]+delta
-            bottom = OPT[i-1][j]+delta
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            diag = OPT[i - 1][j - 1] + gain_map[s1[i-1]][s2[j-1]]
+            left = OPT[i][j - 1] + delta
+            bottom = OPT[i - 1][j] + delta
             optval, optpath = max((left, 1), (bottom, 2), (diag, 3))
             OPT[i][j] = optval
             pred[i][j] = optpath
@@ -47,21 +47,21 @@ def align_strings(s1, s2, gain_map):
     i, j = m, n
     while (i > 0) or (j > 0):
         if pred[i][j] == 1:  # came from left
-            s1_aligned = '*'+s1_aligned 
-            s2_aligned = s2[j]+s2_aligned  # CONSUME!
-            j-=1
+            s1_aligned = '*' + s1_aligned
+            s2_aligned = s2[j-1] + s2_aligned  # CONSUME!
+            j -= 1
         elif pred[i][j] == 2:  # came from bottom
-            s1_aligned = s1[i]+s1_aligned # CONSUME!
-            s2_aligned = '*'+s2_aligned
-            i-=1
+            s1_aligned = s1[i-1] + s1_aligned  # CONSUME!
+            s2_aligned = '*' + s2_aligned
+            i -= 1
         elif pred[i][j] == 3:  # came from diag
-            s1_aligned = s1[i]+s1_aligned  # CONSUME!
-            s2_aligned = s2[j]+s2_aligned  # CONSUME!
-            i-=1
-            j-=1
+            s1_aligned = s1[i-1] + s1_aligned  # CONSUME!
+            s2_aligned = s2[j-1] + s2_aligned  # CONSUME!
+            i -= 1
+            j -= 1
         else:
-            print(m,n)
-            raise ValueError((i,j))
+            print(m, n)
+            raise ValueError((i, j))
 
     return s1_aligned, s2_aligned
 
