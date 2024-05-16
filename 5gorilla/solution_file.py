@@ -1,3 +1,6 @@
+import time
+import sys
+
 def parse_input():
     characters = input().split()
     gain_map = {c: {} for c in characters}
@@ -67,10 +70,12 @@ def align_strings(s1, s2, gain_map):
 
 
 def main():
+    tstart = time.time()
     gain_map, queries = parse_input()
     for s1, s2 in queries:
         aligned_s1, aligned_s2 = align_strings(s1, s2, gain_map)
         print(aligned_s1, aligned_s2)
+    sys.stderr.write(f"Time: {time.time()-tstart}\n")
 
 
 if __name__ == "__main__":
