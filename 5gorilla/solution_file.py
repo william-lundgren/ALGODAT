@@ -14,16 +14,16 @@ def align_strings(s1, s2, gain_map):
     m, n = len(s1), len(s2)
     delta = -4
 
-    #Initiate a zero-filled OPT-matrix (m-1)x(n-1)
-    OPT = [[0] * (m + 1) for _ in range(n+ 1)]
+    # Initiate a zero-filled OPT-matrix (m-1)x(n-1)
+    OPT = [[0] * (n + 1) for _ in range(m + 1)]
     
-    #Initiate a zero-filled pred matrix
+    # Initiate a zero-filled pred matrix
     # 1 = we came from left
     # 2 = we came from bottom
     # 3 = we came from diagonal
-    pred = [[0] * (m+1) for _ in range(n+1)]
+    pred = [[0] * (n+1) for _ in range(m+1)]
 
-    #Initiate first row and first column
+    # Initiate first row and first column
     for i in range(m+1):
         pred[i][0] = 2
         OPT[i][0] = delta*i
@@ -31,7 +31,7 @@ def align_strings(s1, s2, gain_map):
         pred[0][i] = 1
         OPT[0][i] = delta*i
     
-    #Fill OPT matrix
+    # Fill OPT matrix
     for i in range(1, m):
         for j in range(1, n):
             diag = OPT[i-1][j-1]+gain_map[s1[i]][s2[j]]
@@ -41,33 +41,30 @@ def align_strings(s1, s2, gain_map):
             OPT[i][j] = optval
             pred[i][j] = optpath
 
-    #construct strings from opt matrix
+    # construct strings from opt matrix
     s1_aligned = ''
     s2_aligned = ''
-    i, j = m+1, n+1
-    while (i>0) or (j>0): 
-        if pred[i][j] == 1: #came from left
+    i, j = m, n
+    while (i > 0) or (j > 0):
+        if pred[i][j] == 1:  # came from left
             s1_aligned = '*'+s1_aligned 
-            s2_aligned = s2[j]+s2_aligned #CONSUME!
+            s2_aligned = s2[j]+s2_aligned  # CONSUME!
             j-=1
-        elif pred[i][j] == 2: #came from bottom
-            s1_aligned = s1[i]+s1_aligned #CONSUME!
+        elif pred[i][j] == 2:  # came from bottom
+            s1_aligned = s1[i]+s1_aligned # CONSUME!
             s2_aligned = '*'+s2_aligned
             i-=1
-        elif pred[i][j] == 3: #came from diag
-            s1_aligned = s1[i]+s1_aligned #CONSUME!
-            s2_aligned = s2[j]+s2_aligned #CONSUME!
+        elif pred[i][j] == 3:  # came from diag
+            s1_aligned = s1[i]+s1_aligned  # CONSUME!
+            s2_aligned = s2[j]+s2_aligned  # CONSUME!
             i-=1
             j-=1
-        else: 
-            raise ValueError("BOIIIII")
+        else:
+            print(m,n)
+            raise ValueError((i,j))
 
     return s1_aligned, s2_aligned
 
-
-
-
-    
 
 def main():
     gain_map, queries = parse_input()
